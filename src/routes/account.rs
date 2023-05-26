@@ -21,8 +21,8 @@ pub struct CreateAccountForm {
 pub async fn create_account(db: &State<PGDatabase>, create_account_form: Json<CreateAccountForm>) -> (http::Status, String) {
     let account_data = create_account_form.into_inner();
     match db.create_account(account_data).await {
-        Ok(r) => (http::Status::Ok, String::from("Succesfully updated account")),
-        Err(e) => (http::Status::NotModified, format!("Error updating account: {e}"))
+        Ok(r) => (http::Status::Ok, String::from("Succesfully created account")),
+        Err(e) => (http::Status::NotModified, format!("Error creating account: {e}"))
     }
 }
 

@@ -1,8 +1,21 @@
-use sea_orm::{Set, ActiveModelTrait, EntityTrait, QueryFilter, ColumnTrait, DbErr};
-use crate::routes::account::{CreateAccountForm, self, UpdateAccountForm};
-use super::entities;
-
-use super::entities::accounts::{Entity as Account, Column};
+use sea_orm::{
+    Set, 
+    ActiveModelTrait, 
+    EntityTrait, 
+    QueryFilter, 
+    ColumnTrait, 
+    DbErr
+};
+use crate::routes::account::{
+    CreateAccountForm, 
+    UpdateAccountForm
+};
+use super::{
+    entities::accounts, 
+    entities::accounts::{
+        Entity as Account, 
+        Column}
+};
 
 pub enum Identifier {
     Id(i32),
@@ -12,7 +25,7 @@ pub enum Identifier {
 impl super::db::PGDatabase {
 
     pub async fn create_account(&self, create_account_form: CreateAccountForm) -> Result<(), DbErr> {
-        let account = entities::accounts::ActiveModel {
+        let account = accounts::ActiveModel {
             username: Set(create_account_form.username),
             hash: Set(create_account_form.hash),
             salt: Set("uuuuuu".to_string()),
@@ -30,10 +43,8 @@ impl super::db::PGDatabase {
             .await?; // Takes the connection, which we have as part of the struct we're passing, in the "conn" field
         Ok(())
     }
-    
-    
 
-    pub async fn get_account(&self, identifier: Identifier) -> Result<Option<entities::accounts::Model>, DbErr > {
+    pub async fn get_account(&self, identifier: Identifier) -> Result<Option<accounts::Model>, DbErr > {
         let account = match identifier {
             Identifier::Id(id) => {
                 Account::find_by_id(id)
@@ -50,9 +61,12 @@ impl super::db::PGDatabase {
         account
     }
 
-    pub async fn update_account(&self, update_form: UpdateAccountForm) {}
+    pub async fn update_account(&self, update_form: UpdateAccountForm) -> Result<(), DbErr> {
+
+        todo!()
+    }
 
 
 
-    
+
 }
